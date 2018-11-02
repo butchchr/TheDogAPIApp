@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace TheDogAPI
@@ -31,7 +32,14 @@ namespace TheDogAPI
                 {
                     Console.WriteLine("You picked option 1, see a list of dog breeds");
                     var doggos = doggoService.GetDoggos();
-                    Console.WriteLine(doggos);
+                    foreach (var dog in doggos.Message)
+                    {
+                        Console.WriteLine(dog.Key);
+                        foreach (var sub in dog.Value)
+                        {
+                            Console.WriteLine("\t" + sub);
+                        }
+                    }
                 }
                 else if (userInt == 2)
                 {
@@ -66,13 +74,13 @@ namespace TheDogAPI
                 client = new RestClient(baseUrl);
             }
 
-            public string GetDoggos()
+            public DoggoBreedList GetDoggos()
             {
                 var request = new RestRequest("list/all", dataFormat: DataFormat.Json);
 
-                var response = client.Get(request);
+                var response = client.Get<DoggoBreedList>(request);
 
-                return response.Content;
+                return response.Data;
             }
 
             public byte[] GetRandomDoggoPhoto()
@@ -92,6 +100,13 @@ namespace TheDogAPI
             public string Status { get; set; }
 
             public string Message { get; set; }
+        }
+
+        class DoggoBreedList
+        {
+            public string Status { get; set; }
+
+            public Dictionary<string, List<string>> Message { get; set; }
         }
     }
 }
