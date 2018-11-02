@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace TheDogAPI
 {
@@ -60,20 +61,43 @@ namespace TheDogAPI
 
         public static void GetDoggos()
         {
-            //checked in postman and it calls 
-            //https://dog.ceo/api/breeds/list/all 
+            var listUrl = "https://dog.ceo/api/breeds/list/all";
 
             //returns status "sucess"
             //and message list of dogs and sub dogs
+
+            //if (status == sucess)
+            //{
+            //    Console.WriteLine("Here is a big list of all the dog breeds");
+            //    Console.WriteLine();
+            //}
+            //else if (status != sucess)
+            //{
+            //    Console.WriteLine("something out of my controll went wrong, please try again");
+            //}
         }
 
         public static void GetDoggoPhoto()
         {
-            //Checked with postman
-            //https://dog.ceo/api/breeds/image/random
+            var photoUrl = "https://dog.ceo/api/breeds/image/random";
 
             //returns status "sucess"
             //and message random dog URL 
+
+            //if(message == sucess)
+            //{
+            //    Console.WriteLine($"I have saved {jpg} at {C:\}");
+            //}
+            //else if(message != sucess)
+            //{
+            //    Console.WriteLine("something out of my controll went wrong, please try again");
+            //}
+            
+        }
+
+        public static string CallAPI(string url)
+        {
+            return "sucess";
         }
     }
 }
