@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RestSharp;
+using System;
 using System.IO;
-using RestSharp;
 
 namespace TheDogAPI
 {
@@ -12,7 +8,7 @@ namespace TheDogAPI
     {
         static void Main(string[] args)
         {
-
+            var doggoService = new DoggoService("https://dog.ceo/api/breeds/");
             bool y = true;
             while (y)
             {
@@ -31,19 +27,20 @@ namespace TheDogAPI
                     continue;
                 }
 
-
                 if (userInt == 1)
                 {
                     Console.WriteLine("You picked option 1, see a list of dog breeds");
-                    GetDoggos();
+                    var doggos = doggoService.GetDoggos();
+                    Console.WriteLine(doggos);
                 }
-
                 else if (userInt == 2)
                 {
                     Console.WriteLine("You picked option 2, download and save a random dog photo!");
-                    GetDoggoPhoto();
+                    var image = doggoService.GetRandomDoggoPhoto();
+                    var filePath = Path.GetTempFileName() + ".jpg";
+                    File.WriteAllBytes(filePath, image);
+                    Console.WriteLine($"I wrote the photo to {filePath}");
                 }
-
 
                 bool invalid = true;
                 while (invalid)
@@ -60,27 +57,41 @@ namespace TheDogAPI
             }
         }
 
-        public static void GetDoggos()
+        class DoggoService
         {
-            var listUrl = "https://dog.ceo/api/breeds/list/all";
-            Console.WriteLine(CallAPI(listUrl));
+            private readonly IRestClient client;
+
+            public DoggoService(string baseUrl)
+            {
+                client = new RestClient(baseUrl);
+            }
+
+            public string GetDoggos()
+            {
+                var request = new RestRequest("list/all", dataFormat: DataFormat.Json);
+
+                var response = client.Get(request);
+
+                return response.Content;
+            }
+
+            public byte[] GetRandomDoggoPhoto()
+            {
+                var request = new RestRequest("image/random", dataFormat: DataFormat.Json);
+
+                var response = client.Get<DoggoImage>(request);
+
+                var photoRequest = new RestRequest(response.Data.Message);
+
+                return client.DownloadData(photoRequest);
+            }
         }
 
-        public static void GetDoggoPhoto()
+        class DoggoImage
         {
-            var photoUrl = "https://dog.ceo/api/breeds/image/random";
-            Console.WriteLine($"I have saved the image at at C:");
-            var client = new RestClient(photoUrl);
-            client.DownloadData(request).SaveAs()
-        }
+            public string Status { get; set; }
 
-        public static string CallAPI(string url)
-        {
-            var client = new RestClient(url);
-
-            var response = client.Execute(new RestRequest());
-
-            return response.Content;
+            public string Message { get; set; }
         }
     }
 }
