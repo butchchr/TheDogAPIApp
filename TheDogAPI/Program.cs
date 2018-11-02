@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using RestSharp;
 
 namespace TheDogAPI
 {
@@ -62,42 +63,24 @@ namespace TheDogAPI
         public static void GetDoggos()
         {
             var listUrl = "https://dog.ceo/api/breeds/list/all";
-
-            //returns status "sucess"
-            //and message list of dogs and sub dogs
-
-            //if (status == sucess)
-            //{
-            //    Console.WriteLine("Here is a big list of all the dog breeds");
-            //    Console.WriteLine();
-            //}
-            //else if (status != sucess)
-            //{
-            //    Console.WriteLine("something out of my controll went wrong, please try again");
-            //}
+            Console.WriteLine(CallAPI(listUrl));
         }
 
         public static void GetDoggoPhoto()
         {
             var photoUrl = "https://dog.ceo/api/breeds/image/random";
-
-            //returns status "sucess"
-            //and message random dog URL 
-
-            //if(message == sucess)
-            //{
-            //    Console.WriteLine($"I have saved {jpg} at {C:\}");
-            //}
-            //else if(message != sucess)
-            //{
-            //    Console.WriteLine("something out of my controll went wrong, please try again");
-            //}
-            
+            Console.WriteLine($"I have saved the image at at C:");
+            var client = new RestClient(photoUrl);
+            client.DownloadData(request).SaveAs()
         }
 
         public static string CallAPI(string url)
         {
-            return "sucess";
+            var client = new RestClient(url);
+
+            var response = client.Execute(new RestRequest());
+
+            return response.Content;
         }
     }
 }
