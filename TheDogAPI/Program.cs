@@ -23,23 +23,23 @@ namespace TheDogAPI
                 int userInt;
                 bool num1 = int.TryParse(userChoice, out userInt);
 
-                if (!(num1) || 1 > userInt || userInt > 2 )
+                if (!(num1) || 1 > userInt || userInt > 2)
                 {
                     Console.WriteLine("I'm sorry I did not understand that command");
                     continue;
                 }
 
 
-                if(userInt == 1)
+                if (userInt == 1)
                 {
                     Console.WriteLine("You picked option 1, see a list of dog breeds");
-                    //ping the API and Write out breeds
+                    GetDoggos();
                 }
 
-                else if(userInt == 2)
+                else if (userInt == 2)
                 {
                     Console.WriteLine("You picked option 2, download and save a random dog photo!");
-                    //ping API for dog photo
+                    GetDoggoPhoto();
                 }
 
 
@@ -56,6 +56,24 @@ namespace TheDogAPI
                     y = isY;
                 }
             }
+        }
+
+        public static void GetDoggos()
+        {
+            //checked in postman and it calls 
+            //https://dog.ceo/api/breeds/list/all 
+
+            //returns status "sucess"
+            //and message list of dogs and sub dogs
+        }
+
+        public static void GetDoggoPhoto()
+        {
+            //Checked with postman
+            //https://dog.ceo/api/breeds/image/random
+
+            //returns status "sucess"
+            //and message random dog URL 
         }
     }
 }
