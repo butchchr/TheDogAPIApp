@@ -8,13 +8,12 @@ namespace TheDogAPI
         static void Main(string[] args)
         {
             var doggoService = new DoggoService("https://dog.ceo/api/breeds/");
-            var shouldContinue = true;
-            while (shouldContinue)
+            do
             {
                 Console.WriteLine("Hello User! I am a program that helps you interact with 'The Dog API'");
                 Console.WriteLine("Please press '1' to see a list of dog breeds");
                 Console.WriteLine("Please press '2' to have me download and save a random dog photo!");
-                
+
                 int.TryParse(Console.ReadLine(), out var userInt);
 
                 switch (userInt)
@@ -35,7 +34,7 @@ namespace TheDogAPI
                         }
 
                     // Appended .jpg to the end of the file name as the documentation for the dog api indicates that 
-                    // a .jpg is always the time of image that is returned
+                    // .jpg is always the time of image that is returned
                     case 2:
                         {
                             Console.WriteLine("You picked option 2, download and save a random dog photo!");
@@ -52,22 +51,31 @@ namespace TheDogAPI
                             continue;
                         }
                 }
-
-                // repeats program if y presses (independant of case). y and n are the options or promp will repeat.
-                // TODO: Refactor to switch case or do while.
-                var invalidKeyPressed = true;
-                while (invalidKeyPressed)
-                {
-                    Console.WriteLine("Repeat the program? (y/n):");
-                    ConsoleKeyInfo pressed = Console.ReadKey();
-                    Console.WriteLine();
-                    var isY = pressed.Key == ConsoleKey.Y;
-                    var isN = pressed.Key == ConsoleKey.N;
-
-                    invalidKeyPressed = !isY && !isN;
-                    shouldContinue = isY;
-                }
             }
+            while (ShouldRepeat());
         }
+
+        static bool ShouldRepeat()
+        {
+            Console.WriteLine("Repeat the program? (y/n):");
+            ConsoleKeyInfo pressed = Console.ReadKey();
+            Console.WriteLine();
+            var shouldContinue = true;
+
+            if (pressed.Key == ConsoleKey.Y)
+            {
+                shouldContinue = true;
+            }
+            else if (pressed.Key == ConsoleKey.N)
+            {
+                shouldContinue = false;
+            }
+            else
+            {
+                ShouldRepeat();
+            }
+            return shouldContinue;
+        }
+        
     }
 }
