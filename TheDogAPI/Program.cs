@@ -1,6 +1,4 @@
-﻿using RestSharp;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 
 namespace TheDogAPI
@@ -17,44 +15,46 @@ namespace TheDogAPI
                 Console.WriteLine("Please press '1' to see a list of dog breeds");
                 Console.WriteLine("Please press '2' to have me download and save a random dog photo!");
                 
-                var isNumber = int.TryParse(Console.ReadLine(), out var userInt);
+                int.TryParse(Console.ReadLine(), out var userInt);
 
-                // minor validation make sure the user entered '1' or '2'
-                if (!(isNumber) || 1 > userInt || userInt > 2)
+                switch (userInt)
                 {
-                    Console.WriteLine("I'm sorry I did not understand that command");
-                    continue;
-                }
-
-                // TODO: Refactor to switch case
-                if (userInt == 1)
-                {
-                    Console.WriteLine("You picked option 1, see a list of dog breeds");
-                    var doggos = doggoService.GetDoggos();
-                    foreach (var dog in doggos.Message)
-                    { 
-                        Console.WriteLine(dog.Key);
-                        foreach (var sub in dog.Value)
+                    case 1:
                         {
-                            Console.WriteLine("\t" + sub);
+                            Console.WriteLine("You picked option 1, see a list of dog breeds");
+                            var doggos = doggoService.GetDoggos();
+                            foreach (var dog in doggos.Message)
+                            {
+                                Console.WriteLine(dog.Key);
+                                foreach (var sub in dog.Value)
+                                {
+                                    Console.WriteLine("\t" + sub);
+                                }
+                            }
+                            break;
                         }
-                    }
-                }
-                
-                // Appended .jpg to the end of the file name as the documentation for the dog api indicates that 
-                // a .jpg is always the time of image that is returned 
-                else if (userInt == 2)
-                {
-                    Console.WriteLine("You picked option 2, download and save a random dog photo!");
-                    var image = doggoService.GetRandomDoggoPhoto();
-                    var filePath = Path.GetTempFileName() + ".jpg";
-                    File.WriteAllBytes(filePath, image);
-                    Console.WriteLine($"I wrote the photo to {filePath}");
+
+                    // Appended .jpg to the end of the file name as the documentation for the dog api indicates that 
+                    // a .jpg is always the time of image that is returned
+                    case 2:
+                        {
+                            Console.WriteLine("You picked option 2, download and save a random dog photo!");
+                            var image = doggoService.GetRandomDoggoPhoto();
+                            var filePath = Path.GetTempFileName() + ".jpg";
+                            File.WriteAllBytes(filePath, image);
+                            Console.WriteLine($"I wrote the photo to {filePath}");
+                            break;
+                        }
+
+                    default:
+                        {
+                            Console.WriteLine("I'm sorry I did not understand that command");
+                            continue;
+                        }
                 }
 
-
-                //repeats program if y presses (independant of case). y and n are the options or promp will repeat.
-                //TODO Refactor to switch case or do while.
+                // repeats program if y presses (independant of case). y and n are the options or promp will repeat.
+                // TODO: Refactor to switch case or do while.
                 var invalidKeyPressed = true;
                 while (invalidKeyPressed)
                 {
