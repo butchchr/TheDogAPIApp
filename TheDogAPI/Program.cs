@@ -14,9 +14,9 @@ namespace TheDogAPI
                 Console.WriteLine("Please press '1' to see a list of dog breeds");
                 Console.WriteLine("Please press '2' to have me download and save a random dog photo!");
 
-                int.TryParse(Console.ReadLine(), out var userInt);
+                var choice = int.TryParse(Console.ReadLine(), out var userInt) ? userInt : 0;
 
-                switch (userInt)
+                switch (choice)
                 {
                     case 1:
                         {
